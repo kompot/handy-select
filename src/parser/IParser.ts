@@ -1,8 +1,11 @@
+import * as ts from 'typescript';
+
 export interface ISelectionResult {
-  start: number;
-  end: number;
+  nodeStart: ts.Node;
+  nodeEnd: ts.Node;
 }
 
 export interface IParser {
-  expandSelectionAt(start: number, end: number): ISelectionResult;
+  expandSelectionAtPos(start: number, end: number): ISelectionResult;
+  expandSelectionAt(nodeStart: ts.Node, nodeEnd: ts.Node): ISelectionResult;
 }

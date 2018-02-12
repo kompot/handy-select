@@ -88,23 +88,44 @@ export class Parser implements IParser {
     }
   }
 
-  public expandSelectionAt(start: number, end: number): ISelectionResult {
-
-    const deepestNode = this.findDeepestChildAtPosition(
+  public expandSelectionAtPos(start: number, end: number): ISelectionResult {
+    const deepestNodeStart = this.findDeepestChildAtPosition(
       this.source,
       start,
+      start
+    );
+    const deepestNodeEnd = this.findDeepestChildAtPosition(
+      this.source,
+      end,
       end
     );
-    // console.log(
-    //   "_____ deepestNode.kind",
-    //   deepestNode.kind,
-    //   deepestNode.parent.parent.parent.getText(),
-    //   deepestNode.parent.parent.getText(),
-    //   deepestNode.parent.getText()
-    // );
     return {
-      start: deepestNode.getStart(),
-      end: deepestNode.getEnd(),
+      nodeStart: deepestNodeStart,
+      nodeEnd: deepestNodeEnd
+    };
+  }
+
+  private isChildOf(parent: ts.Node, child: ts.Node): boolean {
+    return (
+      parent.getStart() <= child.getStart() && parent.getEnd() >= child.getEnd()
+    );
+  }
+
+  private getLowestCommonAncestor(
+    node1: ts.Node,
+    node2: ts.Node
+  ): ts.Node | undefined {
+    while (!!node1.parent && !this.isChildOf(node1.parent, node2)) {
+      return this.getLowestCommonAncestor(node1.parent, node2);
+    }
+    return node1.parent || this.source;
+  }
+
+  public expandSelectionAt(nodeStart: ts.Node, nodeEnd: ts.Node): ISelectionResult {
+    const lca = this.getLowestCommonAncestor(nodeStart, nodeEnd);
+    return {
+      nodeStart: lca,
+      nodeEnd: lca,
     };
   }
 }
