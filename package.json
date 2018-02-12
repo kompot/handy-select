@@ -1,8 +1,22 @@
 {
   "name": "handy-select",
   "version": "0.0.1",
-  "main": "index.js",
+  "main": "src/index.ts",
   "repository": "https://github.com/kompot/handy-select",
   "author": "Anton Fedchenko <kompotik@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "start": "./node_modules/.bin/ts-node src/index.ts",
+    "test": "./node_modules/.bin/jest --config jest.config.js"
+  },
+  "dependencies": {
+    "@types/lodash": "^4.14.102",
+    "babel-jest": "^22.2.2",
+    "babel-preset-env": "^1.6.1",
+    "jest": "^22.2.2",
+    "lodash": "^4.17.5",
+    "ts-jest": "^22.0.3",
+    "ts-node": "^4.1.0",
+    "typescript": "2.7.1"
+  }
 }
